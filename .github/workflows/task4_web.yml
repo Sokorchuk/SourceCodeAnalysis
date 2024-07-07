@@ -1,0 +1,35 @@
+name: Run script on push to directory task4_web
+
+on:
+  push:
+    paths:
+      - task4_web/**
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Make task4_web executable
+      run: chmod +x ./.github/task4_web
+
+    - name: Run task4_web script
+      run: ./.github/task4_web > report-task4_web.txt
+
+    - name: Configure git
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+    - name: Add changes to git
+      run: git add .
+
+    - name: Commit changes
+      run: |
+        git commit -m 'Add report-task4_web.txt'
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

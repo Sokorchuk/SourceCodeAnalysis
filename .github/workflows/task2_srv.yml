@@ -1,0 +1,35 @@
+name: Run script on push to directory task2_srv
+
+on:
+  push:
+    paths:
+      - task2_srv/**
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Make task2_srv executable
+      run: chmod +x ./.github/task2_srv
+
+    - name: Run task2_srv script
+      run: ./.github/task2_srv > report-task2_srv.txt
+
+    - name: Configure git
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+    - name: Add changes to git
+      run: git add .
+
+    - name: Commit changes
+      run: |
+        git commit -m 'Add report-task2_srv.txt'
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

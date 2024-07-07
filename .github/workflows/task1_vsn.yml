@@ -1,0 +1,35 @@
+name: Run script on push to directory task1_vsn
+
+on:
+  push:
+    paths:
+      - task1_vsn/**
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Make task1_vsn executable
+      run: chmod +x ./.github/task1_vsn
+
+    - name: Run task1_vsn script
+      run: ./.github/task1_vsn > report-task1_vsn.txt
+
+    - name: Configure git
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+    - name: Add changes to git
+      run: git add .
+
+    - name: Commit changes
+      run: |
+        git commit -m 'Add report-task1_vsn.txt'
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
