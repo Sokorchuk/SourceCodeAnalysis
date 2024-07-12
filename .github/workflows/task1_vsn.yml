@@ -16,20 +16,14 @@ jobs:
     - name: Make task1_vsn executable
       run: chmod +x ./.github/task1_vsn
 
-    - name: Run task1_vsn script
-      run: ./.github/task1_vsn > report-task1_vsn.txt
-
-    - name: Configure git
+    - name: Running task1_vsn script
       run: |
-        git config --global user.name 'github-actions[bot]'
-        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        echo 'Running script task1_vsn ...'
+        ./.github/task1_vsn > result-task1_vsn.log
+        cat result-task1_vsn.log
 
-    - name: Add changes to git
-      run: git add .
-
-    - name: Commit changes
-      run: |
-        git commit -m 'Add report-task1_vsn.txt'
-        git push
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Upload test results
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-results
+        path: result-task1_vsn.log

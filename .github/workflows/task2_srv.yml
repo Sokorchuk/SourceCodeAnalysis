@@ -16,20 +16,14 @@ jobs:
     - name: Make task2_srv executable
       run: chmod +x ./.github/task2_srv
 
-    - name: Run task2_srv script
-      run: ./.github/task2_srv > report-task2_srv.txt
-
-    - name: Configure git
+    - name: Running task2_srv script
       run: |
-        git config --global user.name 'github-actions[bot]'
-        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        echo 'Running script task2_srv ...'
+        ./.github/task2_srv > result-task2_srv.log
+        cat result-task2_srv.log
 
-    - name: Add changes to git
-      run: git add .
-
-    - name: Commit changes
-      run: |
-        git commit -m 'Add report-task2_srv.txt'
-        git push
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Upload test results
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-results
+        path: result-task2_srv.log

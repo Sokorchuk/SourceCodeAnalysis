@@ -16,20 +16,14 @@ jobs:
     - name: Make task4_web executable
       run: chmod +x ./.github/task4_web
 
-    - name: Run task4_web script
-      run: ./.github/task4_web > report-task4_web.txt
-
-    - name: Configure git
+    - name: Running task4_web script
       run: |
-        git config --global user.name 'github-actions[bot]'
-        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        echo 'Running script task4_web ...'
+        ./.github/task4_web > result-task4_web.log
+        cat result-task4_web.log
 
-    - name: Add changes to git
-      run: git add .
-
-    - name: Commit changes
-      run: |
-        git commit -m 'Add report-task4_web.txt'
-        git push
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Upload test results
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-results
+        path: result-task4_web.log

@@ -16,20 +16,14 @@ jobs:
     - name: Make task3_iot executable
       run: chmod +x ./.github/task3_iot
 
-    - name: Run task3_iot script
-      run: ./.github/task3_iot > report-task3_iot.txt
-
-    - name: Configure git
+    - name: Running task3_iot script
       run: |
-        git config --global user.name 'github-actions[bot]'
-        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        echo 'Running script task3_iot ...'
+        ./.github/task3_iot > result-task3_iot.log
+        cat result-task3_iot.log
 
-    - name: Add changes to git
-      run: git add .
-
-    - name: Commit changes
-      run: |
-        git commit -m 'Add report-task3_iot.txt'
-        git push
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Upload test results
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-results
+        path: result-task3_iot.log

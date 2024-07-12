@@ -16,20 +16,14 @@ jobs:
     - name: Make task5_mob executable
       run: chmod +x ./.github/task5_mob
 
-    - name: Run task5_mob script
-      run: ./.github/task5_mob > report-task5_mob.txt
-
-    - name: Configure git
+    - name: Running task5_mob script
       run: |
-        git config --global user.name 'github-actions[bot]'
-        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        echo 'Running script task5_mob ...'
+        ./.github/task5_mob > result-task5_mob.log
+        cat result-task5_mob.log
 
-    - name: Add changes to git
-      run: git add .
-
-    - name: Commit changes
-      run: |
-        git commit -m 'Add report-task5_mob.txt'
-        git push
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Upload test results
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-results
+        path: result-task5_mob.log
